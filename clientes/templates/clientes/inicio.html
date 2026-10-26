@@ -6,5 +6,9 @@
     <p>Teléfono: {{ cliente.telefono }}</p>
     <p>Dirección: {{ cliente.direccion }}</p>
 {% endif %}
+<p><a href="{% url 'catalogo' %}">Ver catálogo de productos</a></p>
+{% if user.is_superuser %}
+    <p><a href="{% url 'admin:index' %}">Panel de administración</a></p>
+{% endif %}
 <a href="{% url 'logout' %}">Cerrar sesión</a>
 {% endblock %}

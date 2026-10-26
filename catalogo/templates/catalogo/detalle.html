@@ -1,0 +1,34 @@
+{% extends 'clientes/base.html' %}
+{% block content %}
+<h1>{{ producto.nombre }}</h1>
+<p><a href="{% url 'catalogo' %}">Volver al catálogo</a></p>
+
+{% if producto.imagen %}
+    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="max-width:100%;height:auto;">
+{% endif %}
+
+<h3>Descripción</h3>
+<p>{{ producto.descripcion|safe }}</p>
+
+<h3>Información</h3>
+<p>Código: {{ producto.codigo }}</p>
+<p>Marca: {{ producto.marca.nombre }}</p>
+<p>Categoría: {{ producto.categoria.nombre }}</p>
+<p>Precio: ${{ producto.precio }}</p>
+<p>Stock: {{ producto.stock }}</p>
+
+{% if producto.video_url %}
+    <h3>Video</h3>
+    <p><a href="{{ producto.video_url }}" target="_blank">Ver video</a></p>
+{% endif %}
+
+{% if producto.archivo %}
+    <h3>Ficha descargable</h3>
+    <p><a href="{{ producto.archivo.url }}">Descargar archivo</a></p>
+{% endif %}
+
+{% if producto.enlace %}
+    <h3>Más información</h3>
+    <p><a href="{{ producto.enlace }}" target="_blank">{{ producto.enlace }}</a></p>
+{% endif %}
+{% endblock %}

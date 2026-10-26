@@ -1,0 +1,23 @@
+{% extends 'clientes/base.html' %}
+{% block content %}
+<h1>Catálogo de productos</h1>
+<p><a href="{% url 'inicio' %}">Volver al inicio</a> | <a href="{% url 'logout' %}">Cerrar sesión</a></p>
+
+{% if productos %}
+    {% for p in productos %}
+    <div class="producto">
+        {% if p.imagen %}
+            <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" style="max-width:100%;height:auto;">
+        {% endif %}
+        <h3>{{ p.nombre }}</h3>
+        <p>Código: {{ p.codigo }}</p>
+        <p>Marca: {{ p.marca.nombre }} | Categoría: {{ p.categoria.nombre }}</p>
+        <p>Precio: ${{ p.precio }}</p>
+        <a href="{% url 'detalle_producto' p.id %}">Ver detalle</a>
+    </div>
+    <hr>
+    {% endfor %}
+{% else %}
+    <p>No hay productos cargados todavía.</p>
+{% endif %}
+{% endblock %}
