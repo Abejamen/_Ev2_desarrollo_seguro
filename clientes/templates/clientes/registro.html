@@ -1,0 +1,15 @@
+{% extends 'clientes/base.html' %}
+{% block content %}
+<h1>Registro de clientes</h1>
+<form method="post">
+    {% csrf_token %}
+    <label>Usuario</label><input type="text" name="username">
+    <label>Correo</label><input type="text" name="email">
+    <label>Contraseña</label><input type="password" name="password">
+    <label>RUT</label><input type="text" name="rut">
+    <label>Teléfono</label><input type="text" name="telefono">
+    <label>Dirección de despacho</label><input type="text" name="direccion">
+    <button type="submit">Registrarme</button>
+</form>
+<p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+{% endblock %}
