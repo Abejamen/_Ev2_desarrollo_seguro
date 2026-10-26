@@ -3,6 +3,8 @@
 <h1>Catálogo de productos</h1>
 <p><a href="{% url 'inicio' %}">Volver al inicio</a> | <a href="{% url 'logout' %}">Cerrar sesión</a></p>
 
+<p><a href="{% url 'buscar' %}">Buscar productos</a></p>
+
 {% if productos %}
     {% for p in productos %}
     <div class="producto">
