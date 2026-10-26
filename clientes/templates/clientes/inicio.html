@@ -1,0 +1,10 @@
+{% extends 'clientes/base.html' %}
+{% block content %}
+<h1>Bienvenido, {{ user.username }}</h1>
+{% if cliente %}
+    <p>RUT: {{ cliente.rut }}</p>
+    <p>Teléfono: {{ cliente.telefono }}</p>
+    <p>Dirección: {{ cliente.direccion }}</p>
+{% endif %}
+<a href="{% url 'logout' %}">Cerrar sesión</a>
+{% endblock %}
