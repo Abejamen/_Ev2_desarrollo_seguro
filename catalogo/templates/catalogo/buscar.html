@@ -1,0 +1,62 @@
+{% extends 'clientes/base.html' %}
+{% block content %}
+<h1>Buscar productos</h1>
+<p>
+    <a href="{% url 'catalogo' %}">Volver al catálogo</a> |
+    <a href="{% url 'inicio' %}">Inicio</a> |
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+</p>
+
+<form method="get" action="{% url 'buscar' %}">
+    <label>Nombre o código</label>
+    <input type="text" name="q" id="q" value="{{ q }}" list="lista-sugerencias" autocomplete="off">
+    <datalist id="lista-sugerencias"></datalist>
+
+    <label>Categoría</label>
+    <select name="categoria">
+        <option value="">Todas</option>
+        {% for c in categorias %}
+            <option value="{{ c.id }}">{{ c.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Precio máximo</label>
+    <input type="text" name="precio_max">
+
+    <button type="submit">Buscar</button>
+</form>
+
+<h3>Resultados para: {{ q|safe }}</h3>
+
+{% if resultados %}
+    {% for r in resultados %}
+        <div>
+            <p><strong>{{ r.nombre }}</strong> (código {{ r.codigo }})</p>
+            <p>Precio: ${{ r.precio }} | Stock: {{ r.stock }}</p>
+            <a href="{% url 'detalle_producto' r.id %}">Ver detalle</a>
+        </div>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No se encontraron productos.</p>
+{% endif %}
+
+<script>
+    var campo = document.getElementById('q');
+    var lista = document.getElementById('lista-sugerencias');
+
+    campo.addEventListener('input', function () {
+        if (campo.value.length < 2) { return; }
+        fetch("{% url 'sugerencias' %}?q=" + campo.value)
+            .then(function (r) { return r.json(); })
+            .then(function (datos) {
+                lista.innerHTML = '';
+                datos.sugerencias.forEach(function (nombre) {
+                    var op = document.createElement('option');
+                    op.value = nombre;
+                    lista.appendChild(op);
+                });
+            });
+    });
+</script>
+{% endblock %}
