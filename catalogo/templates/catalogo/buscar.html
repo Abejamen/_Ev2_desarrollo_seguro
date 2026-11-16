@@ -8,6 +8,7 @@
 </p>
 
 <form method="get" action="{% url 'buscar' %}">
+    {% csrf_token %}
     <label>Nombre o código</label>
     <input type="text" name="q" id="q" value="{{ q }}" list="lista-sugerencias" autocomplete="off">
     <datalist id="lista-sugerencias"></datalist>

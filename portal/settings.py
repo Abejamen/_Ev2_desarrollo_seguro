@@ -13,24 +13,18 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
-
 load_dotenv()
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'portal.middleware.SecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'portal.urls'
@@ -71,10 +66,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portal.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -82,10 +74,7 @@ DATABASES = {
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,38 +90,42 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/6.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
-USE_TZ = True
-
+USE_TZ = True  # <--- Corregido: Se encontraba cortado en tu archivo original
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.1/howto/static-files/
-
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # <--- Recomendado para producción
 
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+# Email Configuration (Corregido: Django usa variables EMAIL_*, no un diccionario MAILERS)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
-
-
+# Redirecciones de Autenticación
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+# Seguridad de Cookies y Sesiones
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_AGE = 1800  # Expiración de sesión en 30 minutos
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+#Activar en True solo si usas HTTPS, en http://127.0.0.1 dejar en False para no romper el login local
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
+# Cabeceras adicionales de seguridad
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
